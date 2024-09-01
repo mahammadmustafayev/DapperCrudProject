@@ -969,11 +969,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\DapperCrud\\DapperCrud\\DapperCrud.csproj",
+      "projectUniqueName": "D:\\Projects\\DapperCrudProject\\DapperCrud\\DapperCrud\\DapperCrud.csproj",
       "projectName": "DapperCrud",
-      "projectPath": "D:\\Projects\\DapperCrud\\DapperCrud\\DapperCrud.csproj",
+      "projectPath": "D:\\Projects\\DapperCrudProject\\DapperCrud\\DapperCrud\\DapperCrud.csproj",
       "packagesPath": "C:\\Users\\musta\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\DapperCrud\\DapperCrud\\obj\\",
+      "outputPath": "D:\\Projects\\DapperCrudProject\\DapperCrud\\DapperCrud\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

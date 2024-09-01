@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using DapperCrud.DTOs;
+using DapperCrud.Interfaces;
 using DapperCrud.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,64 +12,59 @@ namespace DapperCrud.Controllers;
 [ApiController]
 public class SuperHeroController : ControllerBase
 {
-    
+    private readonly ISuperHeroService _heroService;
 
-    private readonly IConfiguration _config;
-    public SuperHeroController(IConfiguration config)
+    public SuperHeroController(ISuperHeroService heroService)
     {
-        _config = config;
+        _heroService = heroService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<SuperHero>>> GetAllSuperHeroes()
+    [HttpGet]   
+    public async Task<IActionResult> GetAllSuperHeroes()
     {
-        using var connection = new SqlConnection(_config.GetConnectionString("Database"));
-        IEnumerable<SuperHero> heroes = await SelectAllSuperHeroes(connection);
-        //var heroes = await connection.QueryAsync<SuperHero>("SELECT * FROM SuperHero");
+        var heroes= await _heroService.GetAllSuperHeroes();
+        if (heroes == null) return NotFound();
         return Ok(heroes);
     }
-    [HttpGet("{searchWord}")]
-    public async Task<ActionResult<List<SuperHero>>> SearchHeroes(string searchWord)
-    {
-        using var connection = new SqlConnection(_config.GetConnectionString("Database"));
-        var heroes= await connection.QueryAsync<SuperHero>($"SELECT * FROM SuperHero WHERE HeroName LIKE '%{searchWord}%' OR FirstName LIKE '%{searchWord}%' OR LastName LIKE '%{searchWord}%' OR Place LIKE '%{searchWord}%' ");
-        return Ok(heroes);
-    }
+
     [HttpGet("{heroId}")]
-    public async Task<ActionResult<SuperHero>> GetSuperHero(int heroId)
+    public async Task<IActionResult> GetSuperHero(int heroId)
     {
-        using var connection = new SqlConnection(_config.GetConnectionString("Database"));
-        var hero = await connection.QueryAsync<SuperHero>($"SELECT * FROM SuperHero  WHERE Id = {heroId}");
-        //var hero = await connection.QueryAsync<SuperHero>("SELECT * FROM SuperHero  WHERE Id = @Id",new {Id=heroId});
-        
-        return Ok(hero);
-
+        var superHero= await _heroService.GetSuperHero(heroId);
+        if (superHero == null) return NotFound();
+        return Ok(superHero);
     }
-    [HttpPost]
-    public async Task<ActionResult<List<SuperHero>>> CreateHero(SuperHeroDto superHero)
+
+    [HttpGet("{searchWord}")]
+    public async Task<IActionResult> SearchHeroes(string searchWord)
     {
-        using var connection = new SqlConnection(_config.GetConnectionString("Database"));
-        await connection.ExecuteAsync("INSERT INTO SuperHero (HeroName, FirstName, LastName, Place) VALUES (@HeroName,@FirstName,@LastName,@Place)",superHero);
-        return Ok(await SelectAllSuperHeroes(connection));
+        var searchHeroes= await _heroService.SearchHeroes(searchWord);
+        if (searchHeroes == null) return NotFound();
+        return Ok(searchHeroes);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateHero(SuperHeroDto superHero)
+    {
+        var newHero= await _heroService.CreateHero(superHero);
+        if(newHero == 0) return NotFound();
+        return Ok(await _heroService.GetAllSuperHeroes());
     }
 
     [HttpPut]
-    public async Task<ActionResult<List<SuperHero>>> UpdateHero(SuperHero superHero)
+    public async Task<IActionResult> UpdateHero(SuperHero superHero)
     {
-        using var connection = new SqlConnection(_config.GetConnectionString("Database"));
-        await connection.ExecuteAsync("UPDATE SuperHero SET HeroName=@HeroName, FirstName=@FirstName, LastName=@LastName, Place=@Place WHERE Id=@Id", superHero);
-        return Ok(await SelectAllSuperHeroes(connection));
+        var updateHero= await _heroService.UpdateHero(superHero);
+        if (updateHero == 0) return NotFound();
+        return Ok(await _heroService.GetAllSuperHeroes());
     }
 
     [HttpDelete("{heroId}")]
-    public async Task<ActionResult<List<SuperHero>>> DeleteHero(int heroId)
+    public async Task<IActionResult> DeleteHero(int heroId)
     {
-        using var connection = new SqlConnection(_config.GetConnectionString("Database"));
-        await connection.ExecuteAsync("DELETE FROM SuperHero  WHERE Id=@Id", new {Id=heroId});
-        return Ok(await SelectAllSuperHeroes(connection));
+        var deleteHero= await _heroService.DeleteHero(heroId);
+        if (deleteHero == 0) return NotFound();
+        return Ok(await _heroService.GetAllSuperHeroes());
     }
-    private static async Task<IEnumerable<SuperHero>> SelectAllSuperHeroes(SqlConnection connection)
-    {
-        return await connection.QueryAsync<SuperHero>("SELECT * FROM SuperHero");
-    }
+ 
 }

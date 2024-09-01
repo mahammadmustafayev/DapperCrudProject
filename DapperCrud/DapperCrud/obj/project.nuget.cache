@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7wrGmmp0/T+aJEDwgxtxsFSmuOOmtOY+KIdNm59thB8gyKFWt2VQu9wl5u0GPFbe4YNU9uBDPc1KtIkbR71Nzg==",
+  "dgSpecHash": "F7jX9I2CcUFvAy5VqMkNuD6rLpHc6u0l3ME2EA3L6AilcOkpnPC18LwL40IHw+S7ehO5pqamUmfHCFRulJSoAQ==",
   "success": true,
-  "projectFilePath": "D:\\Projects\\DapperCrud\\DapperCrud\\DapperCrud.csproj",
+  "projectFilePath": "D:\\Projects\\DapperCrudProject\\DapperCrud\\DapperCrud\\DapperCrud.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\musta\\.nuget\\packages\\dapper\\2.1.35\\dapper.2.1.35.nupkg.sha512",
     "C:\\Users\\musta\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.18\\microsoft.aspnetcore.openapi.7.0.18.nupkg.sha512",
